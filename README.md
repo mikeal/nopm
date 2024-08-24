@@ -16,22 +16,22 @@ The process by which a program includes these packages along with other code is 
 
 There are also cases in which installed packages are used directly by an interpreter, obviating any build process. As an example, packages globally installed into Python and Node.js are accessible by name at any time in the interpreter. But it is also true that each one of those packages went throught a "package build" phase prior to being published. So we can now descriminate two divergent use cases: one in which the package manager is the distribution vehicle for the result, and one in which it is not. In both cases, a build phase like we describe can be used either in publishing the package or in building the final software, which ever is more suitable to the parties that implement it.
 
-The environment a package is installed into has an apparent relationship with any program seeking to use such a package (if the package wasn't going to be accessible to "me" in a "place i can see" then I would not appear to have installed a package). So the building of packages, and the building of programs that rely on such programs, are more similar that different.
+The environment a package is installed into has an inherent relationship with any program seeking to use such a package (if the package wasn't going to be accessible to "me" in a "place i can see" then I would not appear to have installed a package). So the building of packages, and the building of programs that rely on such packages, are more similar that different.
 
 Without a package "manager" in the way, we can maybe see more easily that the local files we include in our program and the files that are "installed" by the package manager are similar if not identical in characteristics. Since they are similar, we can secure them together without differentiating between "package files" and "local files." All code included in your program is part of your program, forgetting this is the root of any failure to secure one's program from the code of others.
 
-The main section of this text begins with a simple definition for such a build in shell script. It is meant only as an example we can continue to modify through the text in order to demonstrate the proofs. For a more use case driven example "Functions Only (Mikeal's Method)" appears at the end, which introduces small constraints that make the proofs more useful in practice which allows us to explore ways to replace the many features of package managers that are more specific to each language or environment.
+The main section of this text begins with a simple definition for such a build in shell script. It is meant only as an example we can continue to modify through the text in order to demonstrate the proofs. For a more use case driven example the section "Functions Only (Mikeal's Method)" appears at the end, which introduces small constraints that make the proofs more useful in practice and allow us to explore ways to replace many features of package managers that are more specific to each language or environment.
 
 Once we have secured the files included in a program it's not much more effort to secure our final build. As such, the heart of this text is divided in to two sections:
 
 1. Inclusion Proofs (Replaces Package Management)
 2. Transform Proofs (Secure Verificable Builds)
 
-This results in a language neutral definition for securing packages and other files which is compabitible across any network, registry, or storage layer as long as they have some methods of agreement on cryptographic identities.
+This results in a secure and generic definition for securing packages and other files which is compabitible across any network, registry, or storage layer as long as they have some methods of agreement on cryptographic identities. Since it is nothing but hashes, there's not even encoding details to bikeshed.
 
-The examples here will use `git show` for a "package registry," relying on the cryptographic hashes of files already checked into `git`. Since this is done in shell script, it's easy to imagine replacing or otherwise extending such an interface to include any CLI one writes that retreives data by hash.
+The examples here use `git show` for a "package registry," relying on the cryptographic hashes of files already checked into `git`. Since this is done in shell script, it's easy to imagine replacing or otherwise extending such an interface to include any CLI one writes that retreives data by hash. This means the cryptographic identities that *anyone can define without coordination or prior agreement* are globally unique identifiers that anyone can string into any kind of network or storage layer they choose.
 
-Finally, I'll show how Transform Proofs might be used to describe the function of existing package managers, illuminating the potential for these proofs to be used **in package managers**, cause I'm not dualistic like that.
+Transform Proofs can also be used to describe the process of existing package managers and build tools, illuminating the potential for these proofs to be used **in package managers**, even though this is called "nopm," cause I'm not dualistic like that.
 
 # Simple Build
 
