@@ -24,7 +24,7 @@ The main section of this text begins with a simple definition for such a build i
 
 Once we have secured the files included in a program it's not much more effort to secure our final build. As such, the heart of this text is divided in to two sections:
 
-1. Inclusion Proofs (Replaces Package Management)
+1. Inclusion Proofs (Replaces Package Naming and Locking)
 2. Transformation Proofs (Secure Verificable Builds)
 
 This results in a secure and generic definition for securing packages and other files which is compabitible across any network, registry, or storage layer as long as they have some methods of agreement on cryptographic identities. Since it is nothing but hashes, there's not even encoding details to bikeshed.
