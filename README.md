@@ -214,9 +214,23 @@ for c in "${content[@]}"; do
 done
 ```
 
+```
+% ./build.sh
+a8ad70ecbc4cb81726bb7a3f0d09e5164f95bbd5
+e4360d0a350feb1256781db8e63cdcb4b116ce23
+9bed00d83c3925112f15cf7eb418469298bf5036
+```
+
 Now our build process writes a program (`program.js`) and outputs an inclusion proof.
 
 This build program also accepts such a proof and builds from sources committed to git from the hash identities found in the inclusion proof.
+
+```
+% ./build.sh | ./build.sh -i
+a8ad70ecbc4cb81726bb7a3f0d09e5164f95bbd5
+e4360d0a350feb1256781db8e63cdcb4b116ce23
+9bed00d83c3925112f15cf7eb418469298bf5036
+```
 
 You can verify it works by simply pipeing the output of the build into a new build with the `-i` flag. The output should be identical to `./build.sh`.
 
@@ -245,11 +259,11 @@ If we can:
 * We are already in posession of the build result, and its inclusion proof,
 * Knowing the build process we can call it with this proof and verify it is the same result.
 
-**This** is a verificable build.
+**This** is a verifiable build.
 
-However, there are many transformations which result in programs you cannot derive the inclusion proof from 😅
+However, there are many transformations which result in programs you cannot derive inclusion proof from 😅
 
-In these cases, we need another proof that describes build transformation. This is a "transformation proof" as it represents the transformation of an *input* to an *output* by way of a single *transformation*. You can describe multiple transformations by chaining these proofs together, or by treating a large multi-stage process as a single transformation.
+In these cases, we need another proof that describes build *transformation*. A "transformation proof" represents the transformation of an *input* to an *output* by way of a single *transformation*. You can describe multiple transformations by chaining these proofs together, or by treating a large multi-stage process as a single transformation.
 
 The proof is thus described as three hash identities in order:
 
@@ -259,9 +273,9 @@ The proof is thus described as three hash identities in order:
 
 This is a simple way to describe a transformation, and it is easy to see how this can be extended to more complex transformations.
 
-We can now continue to extend our previous example, writing a new `verifiable-build.js` file that calls `build.sh` and returns the transformation proof.
+We will now extend our previous example, writing a new `verifiable-build.js` file that calls `build.sh` and returns the transformation proof. This will demonstrate how to create a transformation proof from a build process when such a proof cannot be derived from the build result. So we will describe our prior build process which implemented our inclusion proof as a transformation proof in the following way:
 
-1. Our *input* identity will be the identity of the full inclusion proof from our build.
+1. Our *input* identity will be the identity of the full inclusion proof from our build. This means it would be identical if we were to pipe the output of the build directly or write it to a file.
 2. `build.sh` describes our entire *transformation*. Since it depends on no other files other than those described in the inclusion proof, we can use the hash of `build.sh` as the *transformation* identity. If the build depended on other state we'd need to find a way to include that in the identity as well. *This topic will be explored later.*
 3. Our *output* identity will be the identity of the final program.
 
@@ -305,7 +319,7 @@ The following command will trigger a build and return our proof.
 ./verifiable-build.sh
 ```
 
-There's a lot more that package managers do that just install files and lock them. We're going to continue to explore those, but this will be done by describing and signing information **about** these proofs. Rather than design around a central schema, or a central authority, we're going to allow for any schema to be used, and any authority you trust to be trusted.
+There's a lot more that package managers do than just install files and lock them. We're going to continue to explore those, but this will be done by describing and signing information **about** these proofs. Rather than design around a central schema, or a central authority, we're going to allow for any schema to be used, and any authority you trust to be trusted.
 
 Hash identities are universal global identifiers. We can build many highly compatible systems and protocols if we separate what can and cannot be verified. Since what we've described so far is a universal system, we can build many different systems on top of it. Files, packages, builds, and more can all be shared with only what we've already described.
 
