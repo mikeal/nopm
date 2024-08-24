@@ -107,7 +107,7 @@ $content_three
 EOF
 ```
 
-If you want to minify it, you could add this:
+If you want to minify it, you can do this:
 
 ```zsh
 ./build.sh | uglifyjs -c -m
@@ -119,11 +119,14 @@ After that, we'll secure the process by which we build, such that any build proc
 
 # Inclusion Proofs
 
-In our prior example, the build was a file that read other files directly and concatenated them together. We're going to make a slight modification to that process. Instead of reading the files directly, we're going to accept the hash of each file (in order) from the command line. This gives us a more reproducable build process, one that is not dependent on the local state of the files (and we'll make it easy to re-build from local file changes later, so this won't make the local build experience worse).
+In our prior example, the build was a file that read other files directly and concatenated them together. We're going to make a slight modification to that process:
 
-Our build reads a bunch of files and performs a transformation on them to produce a new file that includes what it needs from these parts. The fact that these are "files" is not relevant, all builds takes a bunch of smaller things and combine them into a new thing. Files are obvious/easy to hash, other smaller things a build may rely on could be more abstract or difficult to hash but accomplishable in any system.
+1. We're going to return a *inclusion proof* for our input files.
+2. We're going to add a flag that allows us to build from that *inclusion proof* (looking up and verifying hash identities from `git show`) rather than local files.
 
-We'll use `git show` to retrieve files by hash, which means it will only work if the files are actually checked in to git (for now). This is a simple way to demonstrate the concept, and is trivially replaced with any CLI that retrieves files by hash. This means we'll be using git's hash algorithm to secure the files we include in our program, so our proofs will expect this algorithm. That doesn't mean we're incompatible with other algorithms, it's easy to produce alternate identities for the same file using different algorithms, and once you know they are equivalent (verifiably so!) you can use them interchangably.
+This build reads a bunch of files and performs a transformation on them to produce a new file that includes what it needs from these parts. The fact that these are "files" is not relevant, all builds takes a bunch of smaller things and combine them into a new thing. Files are obvious/easy to hash, other smaller things a build may rely on could be more abstract or difficult to hash but accomplishable in any system.
+
+Using `git show` to retrieve files content by hash identity means building from proof will only only work if the files are actually checked in to git. This is a simple way to demonstrate core concepts, and is trivially replaced with any CLI that retrieves files by hash. We'll be using git's hash identity algorithm to secure the files we include in our program, so our proofs will expect this algorithm. That doesn't mean we're incompatible with other algorithms, it's easy to produce alternate identities for the same content using different algorithms, and once you know they are equivalent (verifiably so!) you can use them interchangably as you hold a verifiable proof of their equivalency.
 
 ```zsh
 #!/bin/sh
@@ -211,7 +214,7 @@ for c in "${content[@]}"; do
 done
 ```
 
-Now our build process writes a program and outputs an inclusion proof.
+Now our build process writes a program (`program.js`) and outputs an inclusion proof.
 
 This build program also accepts such a proof and builds from sources committed to git from the hash identities found in the inclusion proof.
 
@@ -227,9 +230,9 @@ This diff should always be empty, so if you want a command that will fail if the
 bash -c 'diff <(./build.sh) <(./build.sh | ./build.sh -i) > /dev/null || exit 1'
 ```
 
-**This** is a *reproducable* build.
+**This** is a *verifiably reproducable* build.
 
-Now, let's make a *verifiable* build.
+Now, let's make the build process itself just as verifiable.
 
 # Transformation Proofs
 
