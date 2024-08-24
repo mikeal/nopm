@@ -331,6 +331,23 @@ This is for simplicity of presentation and the honest preference of the author. 
 
 By staying simple we get to demonstrate the cryptography and the trust model without getting bogged down in the details. We'll also be assuming that the names of the functions can be derived from the content of the inclusions themselves because we don't want to design another structure for that to live in 😁 In use cases where this is not true, the function name information from elsewhere must be included in the inclusion identity or else you'll suffer from unverifiability caused by this indeterminism.
 
+Most package managers are built before, or addressing systems built before, the rise of modern AI. They are built for developers first, automation second, and AI is rarely considered a consumer. We're going to reverse this order, so that our primary audience is AI, then automation, and finally developers. As such, we're free to imagine a system in which individual and bots can publish without permission granting but where what is being published is not just untrusted but highly suspect. When package registries take on the curation and moderation role they are known for they also leave the packages that are not curated or moderated to be "blessed." If malware was every published, it would be removed once such information was known.
+
+As there is no registry, there is no central means by which one can curate such a list. Malware will be published, and if you are not verifying it isn't malware, you are at risk. This is the world we are building for. It's actually the world we already live in, supply chain attacks have been happening for years, and the best defense we have is AI detection like [Socket.dev](https://socket.dev). A publishing system that presumes from the beginning that packages are not presumed to be anything other than malware without other knowledge is a good way to build a system that is robust and not easily attacked.
+
+We'll continue to utilize `git` for our "registry" and we'll using GitHub Actions for our "computing environment." This involves utilizing some underappreciated features of git, like the ability to commit blobs directly without a filename. We'll model our workflow from code change, to build, publish, numerous forms of verification and improvement, re-publishing, and finally consumption all by adding information to git branches, pushing them, and utilizing the trigger of a push to run a script that does the next step.
+
+In each of these steps, the workflow could easily be split between actors, and when these methods are implemented in open networks numerous actors will take on many of these steps in parallel. GitHub Actions are simply a means by which we can present the separation of actors with varied concerns responding to information. Much of what we discuss could also be applied to existing package managers and their publishing workflows should they implement proofs and signatures rather than, or even alongside, centralized authorities.
+
+onchange:
+  - in main branch: build and publish proofs to published branch
+  - in published branch: verify proofs and publish a verification signature back to the published branch **for AI and automation to consume**
+  - in verified branch: publish signed facts and views about the build to the info branch
+  - in info branch: verify facts and publish a markdown file back to the info branch **for humans to read**
+
+In the end, we end up with a system that proactively validates a lot about packages before humans are ever even notified of a package existing. Software developers and AI that consume these functions have numerous facts and views about a package they can see and authenticate themselves if they don't trust the signers.
+
+Since nothing is being described or exchanged other than hash identities, proofs, signatures, and information that arrives at these through computation, we can build a system that is highly compatible with many different systems and protocols. We can also build a system that is highly resistant to attack and highly resilient to failure. We haven't even defined what programming language this is for, and we don't need to because we'll only ever concern ourselves with data that has gone through verification that it is the language we prefer when we consume it. The same goes for any other characteristic.
 
 🚧🚧🚧🚧🚧🚧🚧🚧
 
