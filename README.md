@@ -231,7 +231,7 @@ bash -c 'diff <(./build.sh) <(./build.sh | ./build.sh -i) > /dev/null || exit 1'
 
 Now, let's make a *verifiable build.
 
-# Transform Proofs
+# Transformation Proofs
 
 In our very simple build, the entire content of the parts are included in the final program. This means that we could, if we wished, parse the parts from the final program in order to *derive* a proof.
 
@@ -246,7 +246,7 @@ If we can:
 
 However, there are many transformations which result in programs you cannot derive the inclusion proof from 😅
 
-In these cases, we need another proof that describes build transformation. This is a "transform proof" as it represents the transformation of an *input* to an *output* by way of a single *transformation*. You can describe multiple transformations by chaining these proofs together, or by treating a large multi-stage process as a single transformation.
+In these cases, we need another proof that describes build transformation. This is a "transformation proof" as it represents the transformation of an *input* to an *output* by way of a single *transformation*. You can describe multiple transformations by chaining these proofs together, or by treating a large multi-stage process as a single transformation.
 
 The proof is thus described as three hash identities in order:
 
@@ -256,7 +256,7 @@ The proof is thus described as three hash identities in order:
 
 This is a simple way to describe a transformation, and it is easy to see how this can be extended to more complex transformations.
 
-We can now continue to extend our previous example, writing a new `verifiable-build.js` file that calls `build.sh` and returns the transform proof.
+We can now continue to extend our previous example, writing a new `verifiable-build.js` file that calls `build.sh` and returns the transformation proof.
 
 1. Our *input* identity will be the identity of the full inclusion proof from our build.
 2. `build.sh` describes our entire *transformation*. Since it depends on no other files other than those described in the inclusion proof, we can use the hash of `build.sh` as the *transformation* identity. If the build depended on other state we'd need to find a way to include that in the identity as well. *This topic will be explored later.*
@@ -288,7 +288,7 @@ proof=(
   "$output_identity"
 )
 
-# Print the transform proof
+# Print the transformation proof
 for c in "${proof[@]}"; do
   echo c
 done
