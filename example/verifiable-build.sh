@@ -23,7 +23,7 @@ proof=(
   "$output_identity"
 )
 
-# Print the transform proof
+# Print the build proof
 for c in "${proof[@]}"; do
   echo "$c"
 done
