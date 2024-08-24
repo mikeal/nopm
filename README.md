@@ -2,7 +2,9 @@
 
 This describes a method and related tooling for accomplishing the results one typically finds in a package manager, but without the need for a package manager.
 
-The result of this method is a cross-language pure functional packaging ecosystem. One that is naturally decentralized since it doesn't even have a package manager to centralize. This involves describing functions and their combination with cryptography, so the resulting systems are verifiable and all trust is established by means of proof. This describes an ecosystem that can't be controlled, even by a central governing authority of such a standard, since any party that presents compabitle proofs can participate and any fork in such proofs will persist so long as it is agreeable between some number of parties.
+The result of this method is a cross-language pure functional packaging ecosystem. One that is naturally decentralized since it doesn't even have a package manager to centralize. This involves describing functions and their combination with cryptography, so the resulting systems are verifiable and all trust is established by means of proof. Such an ecosystem can't be controlled, even by a central governing authority of such a standard, since any party that presents compatible proof can participate and any fork in such proofs which can then persist as long as it is agreeable between some number of parties no matter their size.
+
+Along the way, we aquire verifiable fully reproducible builds, and a method by which anyone can add new forms of builds and packages without permission or coordination with any other party. The method described here can be implemented anywhere, it's not a subscription service or a product for you to download and depend on (thus depending upon **me**), it is freedom from precisely that process of dependence.
 
 ## The Management of No Packages
 
@@ -10,24 +12,24 @@ A lot of work goes in to a package manager, but the interface typically involves
 
 Many package managers have been built for many languages, operating systems, and other environments. They all have their own way of doing things, some use secure hashing to "lock" packages, some don't, but they all take a bunch of smaller things and put them somewhere for you to assemble into a new thing that includes them.
 
-The process by which a program includes these packages along with other code is called the "build." With no package manager between the code you write and the build, we need to describe how to build a program without a package manager. It would need to be able to accept well defined identifiers for third party libraries and include them in its final build efficiently.
+The process by which a program includes these packages along with other code is called the "build." With no package manager between the code you write and the build, we need to describe how to build a program without a package manager. It would need to be able to accept well defined identifiers for libraries and include them in its final build efficiently.
 
-There are cases in which installed packages are used directly by an interpreter, obviating any build process. As an example, packages globally installed into Python and Node.js are accessible by name at any time in the interpreter. But it is also true that each one of those packages went throught a "package build" phase prior to being published. So we can now descriminate two divergent use cases: one in which the package manager is the distribution vehicle for the result, and one in which it is not. In both cases, a build phase like we describe can be used either in publishing the package or in building the final software, which ever would is more suitable to the parties who decide to implement.
+There are also cases in which installed packages are used directly by an interpreter, obviating any build process. As an example, packages globally installed into Python and Node.js are accessible by name at any time in the interpreter. But it is also true that each one of those packages went throught a "package build" phase prior to being published. So we can now descriminate two divergent use cases: one in which the package manager is the distribution vehicle for the result, and one in which it is not. In both cases, a build phase like we describe can be used either in publishing the package or in building the final software, which ever is more suitable to the parties that implement it.
 
-The environment a package is installed into has an apparent relationship with any program seeking to use such a package (if the package wasn't going to be accessible to "me" in a "place i can see" then I would not appear to be installing a package). This means there is little need for divergent choices in the building of packages and the building a program that relies on such packages.
+The environment a package is installed into has an apparent relationship with any program seeking to use such a package (if the package wasn't going to be accessible to "me" in a "place i can see" then I would not appear to have installed a package). So the building of packages, and the building of programs that rely on such programs, are more similar that different.
 
-Without a package "manager" in the way, we can maybe see more easily that the local files we include in our program and the files that are "installed" by the package manager are similar if not identical in characteristics. Since they are so similar, we can secure them together without differentiating between "package files" and "local files". All code included in your program is part of your program, forgetting this is the root of any failure to secure one's packages.
+Without a package "manager" in the way, we can maybe see more easily that the local files we include in our program and the files that are "installed" by the package manager are similar if not identical in characteristics. Since they are similar, we can secure them together without differentiating between "package files" and "local files." All code included in your program is part of your program, forgetting this is the root of any failure to secure one's program from the code of others.
 
-This main section of this text begins with a simple definition for such a build in shell script. It is meant only as an example we can carry through the text in order to demonstrate the proofs. For a more use case driven example "Functions Only (Mikeal's Method)" is an appendix that covers the way @mikeal builds JavaScript.
+The main section of this text begins with a simple definition for such a build in shell script. It is meant only as an example we can continue to modify through the text in order to demonstrate the proofs. For a more use case driven example "Functions Only (Mikeal's Method)" appears at the end, which introduces small constraints that make the proofs more useful in practice which allows us to explore ways to replace the many features of package managers that are more specific to each language or environment.
 
-Once we have secured the files included in a program it's not much more effort to secure our final build. As such, the bulk of this text is divided in to two main sections:
+Once we have secured the files included in a program it's not much more effort to secure our final build. As such, the heart of this text is divided in to two sections:
 
 1. Inclusion Proofs (Replaces Package Management)
 2. Transform Proofs (Secure Verificable Builds)
 
-The result is a language neutral way of defining and securing packages that is compabitible across any network, registry, or storage layer as long as you have access to a suitable hash function.
+This results in a language neutral definition for securing packages and other files which is compabitible across any network, registry, or storage layer as long as they have some methods of agreement on cryptographic identities.
 
-The examples use `git show` for a "package registry," relying on the cryptographic hashes of files already checked into `git`. Since this is done in shell script, it's easy to imagine replacing or otherwise extending such an interface to include any CLI one writes that retreives data by hash.
+The examples here will use `git show` for a "package registry," relying on the cryptographic hashes of files already checked into `git`. Since this is done in shell script, it's easy to imagine replacing or otherwise extending such an interface to include any CLI one writes that retreives data by hash.
 
 Finally, I'll show how Transform Proofs might be used to describe the function of existing package managers, illuminating the potential for these proofs to be used **in package managers**, cause I'm not dualistic like that.
 
@@ -211,15 +213,29 @@ done
 
 Now our build process writes a program and outputs an inclusion proof.
 
-This build program also accepts such a proof and builds from sources committed to git from the hash identities found in the inclusion proof. **This** is a reproducable build.
+This build program also accepts such a proof and builds from sources committed to git from the hash identities found in the inclusion proof.
 
-Now, let's make a verificable build.
+You can verify it works by simply pipeing the output of the build into a new build with the `-i` flag. The output should be identical to `./build.sh`.
+
+```
+diff <(./build.sh) <(./build.sh | ./build.sh -i)
+```
+
+This diff should always be empty, so if you want a command that will fail if the build is not reproducable, you can use this:
+
+```
+bash -c 'diff <(./build.sh) <(./build.sh | ./build.sh -i) > /dev/null || exit 1'
+```
+
+**This** is a *reproducable* build.
+
+Now, let's make a *verifiable build.
 
 # Transform Proofs
 
-In our very simple build, the entire content of the parts are included in the final program. This means that we could, if we wished, parse the parts from the final program in order to derive a proof.
+In our very simple build, the entire content of the parts are included in the final program. This means that we could, if we wished, parse the parts from the final program in order to *derive* a proof.
 
-When transformations result in programs that can have their proofs derived from the result, or even a combination of this result and other information (like source-maps), we already have a verifiable build so long as we have knowledge of the build process.
+When transformations result in programs that can have their proofs derived from the result, or even a combination of the result and other information (like source-maps), we already have a verifiable build so long as we have knowledge of the build process.
 
 If we can:
 * Derive the inclusion proof from the build result,
@@ -228,9 +244,9 @@ If we can:
 
 **This** is a verificable build.
 
-However, there are many transformations in which result in programs which you cannot derive the inclusion proof from 😅
+However, there are many transformations which result in programs you cannot derive the inclusion proof from 😅
 
-In these cases, we need another proof that describes build transformation. This is a "transform proof" as it represents the transformation of an *input* to an *output* by way of a single *transformation*.
+In these cases, we need another proof that describes build transformation. This is a "transform proof" as it represents the transformation of an *input* to an *output* by way of a single *transformation*. You can describe multiple transformations by chaining these proofs together, or by treating a large multi-stage process as a single transformation.
 
 The proof is thus described as three hash identities in order:
 
@@ -240,10 +256,10 @@ The proof is thus described as three hash identities in order:
 
 This is a simple way to describe a transformation, and it is easy to see how this can be extended to more complex transformations.
 
-We'll continue to extend our previous example:
+We can now continue to extend our previous example, writing a new `verifiable-build.js` file that calls `build.sh` and returns the transform proof.
 
 1. Our *input* identity will be the identity of the full inclusion proof from our build.
-2. We'll use `build.sh` as our *transformation* and since it depends on no other files other than those described in the inclusion proof, we can use the hash of `build.sh` as the *transformation* identity.
+2. `build.sh` describes our entire *transformation*. Since it depends on no other files other than those described in the inclusion proof, we can use the hash of `build.sh` as the *transformation* identity. If the build depended on other state we'd need to find a way to include that in the identity as well. *This topic will be explored later.*
 3. Our *output* identity will be the identity of the final program.
 
 ```zsh
@@ -277,3 +293,30 @@ for c in "${proof[@]}"; do
   echo c
 done
 ```
+
+That's it.
+
+The following command will trigger a build and return our proof.
+
+```
+./verifiable-build.sh
+```
+
+There's a lot more that package managers do that just install files and lock them. We're going to continue to explore those, but this will be done by describing and signing information **about** these proofs. Rather than design around a central schema, or a central authority, we're going to allow for any schema to be used, and any authority you trust to be trusted.
+
+Hash identities are universal global identifiers. We can build many highly compatible systems and protocols if we separate what can and cannot be verified. Since what we've described so far is a universal system, we can build many different systems on top of it. Files, packages, builds, and more can all be shared with only what we've already described.
+
+# Functions Only (Mikeal's Method)
+
+From this point forward, we're going to describe a system that presumes the *inclusions* (js files in our example) are all describing single functions.
+
+This is for simplicity of presentation and the honest preference of the author. What is being described can also be described with more complex structures like classes, modules, or even entire programs. However, the more complex the structure, the more complex the system that must be present to verify it.
+
+By staying simple we get to demonstrate the cryptography and the trust model without getting bogged down in the details. We'll also be assuming that the names of the functions can be derived from the content of the inclusions themselves because we don't want to design another structure for that to live in 😁 In use cases where this is not true, the function name information from elsewhere must be included in the inclusion identity or else you'll suffer from unverifiability caused by this indeterminism.
+
+
+🚧🚧🚧🚧🚧🚧🚧🚧
+
+Under Construction
+
+🚧🚧🚧🚧🚧🚧🚧🚧
