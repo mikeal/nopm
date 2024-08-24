@@ -229,7 +229,7 @@ bash -c 'diff <(./build.sh) <(./build.sh | ./build.sh -i) > /dev/null || exit 1'
 
 **This** is a *reproducable* build.
 
-Now, let's make a *verifiable build.
+Now, let's make a *verifiable* build.
 
 # Transformation Proofs
 
