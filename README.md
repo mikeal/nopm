@@ -25,13 +25,13 @@ The main section of this text begins with a simple definition for such a build i
 Once we have secured the files included in a program it's not much more effort to secure our final build. As such, the heart of this text is divided in to two sections:
 
 1. Inclusion Proofs (Replaces Package Management)
-2. Transform Proofs (Secure Verificable Builds)
+2. Transformation Proofs (Secure Verificable Builds)
 
 This results in a secure and generic definition for securing packages and other files which is compabitible across any network, registry, or storage layer as long as they have some methods of agreement on cryptographic identities. Since it is nothing but hashes, there's not even encoding details to bikeshed.
 
 The examples here use `git show` for a "package registry," relying on the cryptographic hashes of files already checked into `git`. Since this is done in shell script, it's easy to imagine replacing or otherwise extending such an interface to include any CLI one writes that retreives data by hash. This means the cryptographic identities that *anyone can define without coordination or prior agreement* are globally unique identifiers that anyone can string into any kind of network or storage layer they choose.
 
-Transform Proofs can also be used to describe the process of existing package managers and build tools, illuminating the potential for these proofs to be used **in package managers**, even though this is called "nopm," cause I'm not dualistic like that.
+Transformation Proofs can also be used to describe the process of existing package managers and build tools, illuminating the potential for these proofs to be used **in package managers**, even though this is called "nopm," cause I'm not dualistic like that.
 
 # Simple Build
 
