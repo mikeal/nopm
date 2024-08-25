@@ -275,7 +275,7 @@ This is a simple way to describe a transformation, and it is easy to see how thi
 
 We will now extend our previous example, writing a new `verifiable-build.js` file that calls `build.sh` and returns the transformation proof. This will demonstrate how to create a transformation proof from a build process when such a proof cannot be derived from the build result. So we will describe our prior build process which implemented our inclusion proof as a transformation proof in the following way:
 
-1. Our *input* identity will be the identity of the full inclusion proof from our build. This means it would be identical if we were to pipe the output of the build directly or write it to a file.
+1. Our *input* identity will be the identity of the full inclusion proof from our build.
 2. `build.sh` describes our entire *transformation*. Since it depends on no other files other than those described in the inclusion proof, we can use the hash of `build.sh` as the *transformation* identity. If the build depended on other state we'd need to find a way to include that in the identity as well. *This topic will be explored later.*
 3. Our *output* identity will be the identity of the final program.
 
