@@ -27,7 +27,7 @@ Once we have secured the files included in a program it's not much more effort t
 1. Inclusion Proofs (Replaces Package Naming and Locking, Adds Reproducable Builds)
 2. Transformation Proofs (Secure Verifiable Builds)
 
-This results in a secure and generic definition for securing packages and other files which is compabitible across any network, registry, or storage layer. Since it is nothing but hashes, there's not even encoding details to bikeshed.
+This results in a generic definition for securing packages and other files which is compabitible across any network, registry, or storage layer. Since it is nothing but hashes, there's not even encoding details to bikeshed.
 
 The examples here use `git show` for a "package registry," relying on the cryptographic hashes of files already checked into `git`. Since this is done in shell script, it's easy to imagine replacing or otherwise extending such an interface to include any CLI one writes that retreives data by hash. This means the cryptographic identities that *anyone can define without coordination or prior agreement* are globally unique identifiers that anyone can string into any kind of network or storage layer they choose.
 
