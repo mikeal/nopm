@@ -2,7 +2,7 @@
 
 This describes a method and related tooling for accomplishing the results one typically finds in a package manager, but without the need for a package manager.
 
-The result of this method is a cross-language/environment "package" ecosystem. One that is naturally decentralized since it doesn't even have a package manager to centralize. This involves describing functions and their combination with cryptography, so the resulting systems are verifiable and all trust is established by means of proof. Such an ecosystem can't be controlled, even by a central governing authority of such a standard, since any party that presents compatible proof can participate and any fork in such proofs would persist as long as it is agreeable between some number of parties no matter their size.
+The result of this method is a cross-language/environment "package" ecosystem. One that is naturally decentralized since it doesn't even have a package manager to centralize. This involves describing functions and their combination with cryptography, so the resulting systems are verifiable and trust is established by means of proof. Such an ecosystem can't be controlled, even by a central governing authority of such a standard, since any party that presents compatible proof can participate and any fork in such proofs would persist as long as it is agreeable between even only two actors.
 
 Along the way, we aquire verifiable fully reproducible builds, and a method by which anyone can add new forms of builds and packages without permission or coordination with any other party. The method described here can be implemented anywhere, it's not a subscription service or a product for you to download and depend on (thus depending upon **me**), it is freedom from precisely that process of dependence.
 
@@ -12,7 +12,7 @@ A lot of work goes in to a package manager, but the interface typically involves
 
 Many package managers have been built for many languages, operating systems, and other environments. They all have their own way of doing things, some use secure hashing to "lock" packages, some don't, but they all take a bunch of smaller things and put them somewhere for you to assemble into a new thing that includes them.
 
-The process by which a program includes these packages along with other code is called the "build." With no package manager between the code you write and the build, we need to describe how to build a program without a package manager. It would need to be able to accept well defined identifiers for libraries and include them in its final build efficiently.
+The process by which a program includes these packages along with other code is called the "build." With no package manager between the code you write and the build, we need to describe how to build a program without a package manager. It would need to be able to accept well defined identifiers for libraries (like a package manager would) and include them in its final build efficiently.
 
 There are also cases in which installed packages are used directly by an interpreter, obviating any build process. As an example, packages globally installed into Python and Node.js are accessible by name at any time in the interpreter. But it is also true that each one of those packages went throught a "package build" phase prior to being published. So we can now descriminate two divergent use cases: one in which the package manager is the distribution vehicle for the result, and one in which it is not. In both cases, a build phase like we describe can be used either in publishing the package or in building the final software, which ever is more suitable to the parties that implement it.
 
@@ -25,15 +25,15 @@ The main section of this text begins with a simple definition for such a build i
 Once we have secured the files included in a program it's not much more effort to secure our final build. As such, the heart of this text is divided in to two sections:
 
 1. Inclusion Proofs (Replaces Package Naming and Locking, Adds Reproducable Builds)
-2. Transformation Proofs (Secure Verificable Builds)
+2. Transformation Proofs (Secure Verifiable Builds)
 
 This results in a secure and generic definition for securing packages and other files which is compabitible across any network, registry, or storage layer. Since it is nothing but hashes, there's not even encoding details to bikeshed.
 
 The examples here use `git show` for a "package registry," relying on the cryptographic hashes of files already checked into `git`. Since this is done in shell script, it's easy to imagine replacing or otherwise extending such an interface to include any CLI one writes that retreives data by hash. This means the cryptographic identities that *anyone can define without coordination or prior agreement* are globally unique identifiers that anyone can string into any kind of network or storage layer they choose.
 
-Transformation Proofs can also be used to describe the process of existing package managers and build tools, illuminating the potential for these proofs to be used **in package managers**, even though this is called "nopm," cause I'm not dualistic like that.
+Transformation Proofs can also be used to describe the process of existing package managers and build tools, illuminating the potential for these proofs to be used **in package managers**, even though this is called "**no**pm," cause I'm not dualistic like that.
 
-# Simple Build
+# Simple Build Definition
 
 Here we define a simple shell script that takes individual JavaScript files and concatenates them into a larger file.
 
@@ -121,12 +121,12 @@ After that, we'll secure the process by which we build, such that any build proc
 
 In our prior example, the build was a file that read other files directly and concatenated them together. We're going to make a slight modification to that process:
 
-1. We're going to return a *inclusion proof* for our input files.
+1. We're going to return an *inclusion proof* for our input files from the build process.
 2. We're going to add a flag that allows us to build from that *inclusion proof* (looking up and verifying hash identities from `git show`) rather than local files.
 
-This build reads a bunch of files and performs a transformation on them to produce a new file that includes what it needs from these parts. The fact that these are "files" is not relevant, all builds takes a bunch of smaller things and combine them into a new thing. Files are obvious/easy to hash, other smaller things a build may rely on could be more abstract or difficult to hash but accomplishable in any system.
+Our build reads a bunch of files and performs a transformation on them to produce a new file that includes what it needs from these parts. The fact that these are "files" is not relevant, all builds takes a bunch of smaller things and combine them into a new thing. Files are obvious/easy to hash, other things a build may rely on could be more abstract or difficult to hash but accomplishable in any system.
 
-Using `git show` to retrieve files content by hash identity means building from proof will only only work if the files are actually checked in to git. This is a simple way to demonstrate core concepts, and is trivially replaced with any CLI that retrieves files by hash. We'll be using git's hash identity algorithm to secure the files we include in our program, so our proofs will expect this algorithm. That doesn't mean we're incompatible with other algorithms, it's easy to produce alternate identities for the same content using different algorithms, and once you know they are equivalent (verifiably so!) you can use them interchangably as you hold a verifiable proof of their equivalency.
+Using `git show` to retrieve file content by hash identity means building from proof will only work if the files are actually checked in to git. This is a simple way to demonstrate core concepts, and is trivially replaced with any CLI that retrieves files by hash. We'll be using git's hash identity algorithm to secure the files we include in our program, so our proofs will expect this algorithm. That doesn't mean we're incompatible with other algorithms, it's easy to produce alternate identities for the same content using different algorithms, and once you know they are equivalent (verifiably so!) you can use them interchangably as you hold a verifiable proof of their equivalency.
 
 ```zsh
 #!/bin/sh
