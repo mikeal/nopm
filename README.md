@@ -214,6 +214,12 @@ for c in "${content[@]}"; do
 done
 ```
 
+Here we're just working with local files, but since we're also demonstrating a method in which a hash is used instead of a local file, we have a globally unique verifiable identifier that can be used as well.
+
+Any package publishing system that can retreive content by a verifiable identity can be used alongside this. Human readable package names can be resolved into these identities, and the identities can be resolved into content. This is a simple way to secure the content of a package, and it's a way that can be used in any system that can resolve these identities.
+
+An npm package would have a more complicated process to identify and resolve packages, but once such a process is defined anyone can use it and anyone can arrive at agreement on package identities using the contents **already available in npm.** You wouldn't even need an npm client or any of the npm software to do this as long as you understand the process and have access to the package content.
+
 ```
 % ./build.sh
 a8ad70ecbc4cb81726bb7a3f0d09e5164f95bbd5
