@@ -214,7 +214,7 @@ for c in "${content[@]}"; do
 done
 ```
 
-Here we're just working with local files, but since we're also demonstrating a method in which a hash is used instead of a local file, we have a globally unique verifiable identifier that can be used as well.
+Here we're just working with local content, but we're also demonstrating a method in which a hash is used instead of a local filename, so we have a globally unique verifiable identifier for package names in their inclusion identity.
 
 Any package publishing system that can retreive content by a verifiable identity can be used alongside this. Human readable package names can be resolved into these identities, and the identities can be resolved into content. This is a simple way to secure the content of a package, and it's a way that can be used in any system that can resolve these identities.
 
