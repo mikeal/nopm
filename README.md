@@ -323,6 +323,8 @@ There's a lot more that package managers do than just install files and lock the
 
 Hash identities are universal global identifiers. We can build many highly compatible systems and protocols if we separate what can and cannot be verified. Since what we've described so far is a universal system, we can build many different systems on top of it. Files, packages, builds, and more can all be shared with only what we've already described.
 
+These aren't proofs for files that are stored in `git`. Instead of files, you could create identities for any type of input, and store them anywhere you can retreive and verify them.
+
 # Functions Only (Mikeal's Method)
 
 From this point forward, we're going to describe a system that presumes the *inclusions* (js files in our example) are all describing single functions.
@@ -331,7 +333,7 @@ This is for simplicity of presentation and the honest preference of the author. 
 
 By staying simple we get to demonstrate the cryptography and the trust model without getting bogged down in the details. We'll also be assuming that the names of the functions can be derived from the content of the inclusions themselves because we don't want to design another structure for that to live in 😁 In use cases where this is not true, the function name information from elsewhere must be included in the inclusion identity or else you'll suffer from unverifiability caused by this indeterminism.
 
-Most package managers are built before, or addressing systems built before, the rise of modern AI. They are built for developers first, automation second, and AI is rarely considered a consumer. We're going to reverse this order, so that our primary audience is AI, then automation, and finally developers. As such, we're free to imagine a system in which individuals and bots can publish without a coordinating authority but where what is being published is not just untrusted but ***highly suspect***. 
+Most package managers are built before, or addressing systems built before, the rise of modern AI. They are built for developers first, automation second, and AI is rarely considered a consumer. We're going to reverse this order, so that our primary audience is AI, then automation, and finally developers. As such, we're free to imagine a system in which individuals and bots can publish without a coordinating authority but where what is being published is not just untrusted but ***highly suspect***.
 
 When package registries take on the curation and moderation role they are known for they also leave the packages that are curated and not moderated "blessed." If malware was ever published, it would be removed once such information was known.
 
