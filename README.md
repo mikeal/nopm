@@ -256,7 +256,7 @@ Now, let's make the build process itself just as verifiable.
 
 # Transformation Proofs
 
-In our very simple build, the entire content of the parts are included in the final program. This means that we could, if we wished, parse the parts from the final program in order to *derive* a proof.
+In our very simple build, the entire content of the parts are included in the final program. This means that we could, if we wished, parse those parts from the final program in order to *derive* a proof.
 
 When transformations result in programs that can have their proofs derived from the result, or even a combination of the result and other information (like source-maps), we already have a verifiable build so long as we have knowledge of the build process.
 
