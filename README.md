@@ -227,7 +227,7 @@ e4360d0a350feb1256781db8e63cdcb4b116ce23
 9bed00d83c3925112f15cf7eb418469298bf5036
 ```
 
-Now our build process writes a program (`program.js`) and outputs an inclusion proof.
+Our build process now appears to write a program (`program.js`) and output an inclusion proof.
 
 This build program also accepts such a proof and builds from sources committed to git from the hash identities found in the inclusion proof.
 
